@@ -6,7 +6,7 @@
     <title>Testbook Maths Guru</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     
     <!-- Math.js for Logic and Verification -->
@@ -21,311 +21,442 @@
     <!-- Login Overlay -->
     <div id="login-overlay" class="overlay active">
         <div class="login-card">
-            <h2>Welcome to Testbook Maths Guru</h2>
+            <h1 class="logo-text" style="font-size: 2rem; color: #dc2626; margin-bottom: 20px;">Testbook</h1>
+            <h2>Welcome to Maths Guru</h2>
             <p>Please enter your details to start learning.</p>
             <input type="text" id="login-name" class="styled-input full-width" placeholder="Full Name">
             <input type="email" id="login-email" class="styled-input full-width" placeholder="Email Address">
             <input type="tel" id="login-phone" class="styled-input full-width" placeholder="Phone Number">
-            <button class="action-btn" onclick="submitLogin()">Start Learning</button>
+            <button class="action-btn red-btn" onclick="submitLogin()">Start Learning</button>
             <p id="login-error" class="error-text hidden">Please fill in all fields.</p>
         </div>
     </div>
 
     <!-- Main Application -->
-    <div class="widget-container" id="main-app" style="display: none;">
+    <div class="app-container" id="main-app" style="display: none;">
         
-        <!-- Header -->
-        <div class="app-header">
-            <h2>Testbook Maths Guru</h2>
-        </div>
+        <!-- Header Nav -->
+        <header class="top-nav">
+            <div class="nav-left">
+                <h2 class="logo-text">Testbook <span style="font-weight: 300;">Maths</span></h2>
+            </div>
+            <nav class="nav-center">
+                <button class="tab-btn active" data-target="guru">🤖 AI Chat</button>
+                <button class="tab-btn" data-target="graphing">📈 Graphing</button>
+                <button class="tab-btn" data-target="calculators">🔢 Calculators</button>
+                <button class="tab-btn" data-target="verify">✅ Verify</button>
+                <button class="tab-btn" data-target="sheets">📝 Cheat Sheets</button>
+                <button class="tab-btn" data-target="worksheets">🧠 Worksheets</button>
+            </nav>
+            <div class="nav-right">
+                <div class="user-avatar" id="user-initials">T</div>
+            </div>
+        </header>
 
-        <!-- Tab Navigation -->
-        <nav class="tabs">
-            <button class="tab-btn active" data-target="guru">🤖 Guru</button>
-            <button class="tab-btn" data-target="calculators">🔢 Calc</button>
-            <button class="tab-btn" data-target="graphing">📈 Graph</button>
-            <button class="tab-btn" data-target="verify">✅ Verify</button>
-            <button class="tab-btn" data-target="sheets">📝 Sheets</button>
-            <button class="tab-btn" data-target="worksheets">🧠 Practice</button>
-        </nav>
-
-        <!-- Tab Contents -->
-        <div class="tab-content-container">
+        <!-- Main Content Area -->
+        <main class="main-content">
             
             <!-- 1. Testbook Maths Guru (AI Chat) -->
             <div id="guru" class="tab-content active">
-                <div class="gpt-chat-container">
-                    <div class="chat-messages" id="chat-messages">
-                        <div class="message bot">
-                            Hi! I'm Testbook Maths Guru 📚. You can ask me natural language math questions like:<br><br>
-                            👉 <i>"Calculate 250 * 4 + 10"</i><br>
-                            👉 <i>"Derivative of x^3"</i><br>
-                            👉 <i>"Simplify 2x + 5x"</i><br>
+                <div class="full-page-container">
+                    <div class="gpt-chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="message bot">
+                                Hi! I'm Testbook Maths Guru. I can help you solve complex equations, simplify algebra, and calculate geometry! Try asking me:<br><br>
+                                👉 <i>"Calculate 250 * 4 + 10"</i><br>
+                                👉 <i>"Derivative of x^3"</i><br>
+                                👉 <i>"Simplify 2x + 5x"</i><br>
+                            </div>
+                        </div>
+                        <div class="chat-input-area">
+                            <input type="text" id="gpt-input" placeholder="Ask a math question..." class="styled-input" autocomplete="off" onkeypress="handleGptEnter(event)">
+                            <button class="action-btn gpt-send-btn red-btn" onclick="sendGptMessage()">Send</button>
+                        </div>
+                        
+                        <!-- Recent Searches Section -->
+                        <div class="recent-searches-box">
+                            <h4>Recent Global Searches</h4>
+                            <ul id="recent-searches-list">
+                                <li>Loading...</li>
+                            </ul>
                         </div>
                     </div>
-                    <div class="chat-input-area">
-                        <input type="text" id="gpt-input" placeholder="Ask a math question..." class="styled-input" autocomplete="off" onkeypress="handleGptEnter(event)">
-                        <button class="action-btn gpt-send-btn" onclick="sendGptMessage()">Send</button>
+                </div>
+            </div>
+
+            <!-- 2. Graphing Calculator -->
+            <div id="graphing" class="tab-content">
+                <div class="split-layout">
+                    <!-- Left Sidebar for Input -->
+                    <div class="sidebar">
+                        <h3 class="sidebar-title">Graphing Tool</h3>
+                        <div class="graph-input-group">
+                            <label>Expression f(x)</label>
+                            <input type="text" id="graph-input" value="x^2" class="styled-input full-width">
+                        </div>
+                        <div class="graph-input-group">
+                            <label>Expression g(x) (Optional)</label>
+                            <input type="text" id="graph-input-2" value="" class="styled-input full-width" placeholder="e.g., sin(x)">
+                        </div>
+                        <button class="action-btn red-btn full-width" onclick="drawGraph()">Plot Graph</button>
+                        
+                        <div class="instructions mt-20">
+                            <p><b>Tips:</b></p>
+                            <ul>
+                                <li>Use <code>^</code> for exponents (e.g., <code>x^3</code>)</li>
+                                <li>Use standard functions like <code>sin(x)</code>, <code>cos(x)</code>, <code>log(x)</code></li>
+                                <li>You can drag the graph to pan and scroll to zoom.</li>
+                            </ul>
+                        </div>
                     </div>
                     
-                    <!-- Recent Searches Section -->
-                    <div class="recent-searches-box">
-                        <h4>Recent Global Searches</h4>
-                        <ul id="recent-searches-list">
-                            <li>Loading...</li>
+                    <!-- Right Canvas -->
+                    <div class="main-panel" id="plot-container">
+                        <div id="plot"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Cheat Sheets -->
+            <div id="sheets" class="tab-content">
+                <div class="split-layout">
+                    <!-- Left Sidebar Nav -->
+                    <div class="sidebar">
+                        <h3 class="sidebar-title">Categories</h3>
+                        <ul class="sidebar-nav">
+                            <li><a href="#" onclick="scrollToSection('cs-number')" class="active">Number Rules</a></li>
+                            <li><a href="#" onclick="scrollToSection('cs-expand')">Expand Rules</a></li>
+                            <li><a href="#" onclick="scrollToSection('cs-fractions')">Fractions Rules</a></li>
+                            <li><a href="#" onclick="scrollToSection('cs-exponents')">Exponent Rules</a></li>
+                            <li><a href="#" onclick="scrollToSection('cs-radicals')">Radical Rules</a></li>
+                            <li><a href="#" onclick="scrollToSection('cs-log')">Logarithm Rules</a></li>
+                            <li class="nav-divider">Calculus</li>
+                            <li><a href="#" onclick="scrollToSection('cs-derivatives')">Derivatives</a></li>
+                            <li><a href="#" onclick="scrollToSection('cs-integrals')">Integrals</a></li>
+                            <li class="nav-divider">Trigonometry</li>
+                            <li><a href="#" onclick="scrollToSection('cs-trig')">Trig Identities</a></li>
                         </ul>
                     </div>
+                    
+                    <!-- Right Content Panel -->
+                    <div class="main-panel scrollable-panel" id="cheatsheet-content">
+                        <h2 class="page-title">Algebra & Calculus Cheat Sheets</h2>
+                        
+                        <div id="cs-number" class="cs-section">
+                            <h3 class="cs-header">Number Rules</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">a · 0 = 0</div>
+                                <div class="cs-card">1 · a = a</div>
+                                <div class="cs-card">a · (1/a) = 1  (a ≠ 0)</div>
+                                <div class="cs-card">a + (-a) = 0</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-expand" class="cs-section">
+                            <h3 class="cs-header">Expand Rules</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">a(b + c) = ab + ac</div>
+                                <div class="cs-card">-(a ± b) = -a ∓ b</div>
+                                <div class="cs-card">(a + b)(c + d) = ac + ad + bc + bd</div>
+                                <div class="cs-card">(a + b)² = a² + 2ab + b²</div>
+                                <div class="cs-card">(a - b)² = a² - 2ab + b²</div>
+                                <div class="cs-card">(a + b)(a - b) = a² - b²</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-fractions" class="cs-section">
+                            <h3 class="cs-header">Fractions Rules</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">a/b + c/d = (ad + bc) / bd</div>
+                                <div class="cs-card">a/b - c/d = (ad - bc) / bd</div>
+                                <div class="cs-card">(a/b) · (c/d) = ac / bd</div>
+                                <div class="cs-card">(a/b) ÷ (c/d) = (a/b) · (d/c) = ad / bc</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-exponents" class="cs-section">
+                            <h3 class="cs-header">Exponent Rules</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">xᵃ · xᵇ = xᵃ⁺ᵇ</div>
+                                <div class="cs-card">xᵃ / xᵇ = xᵃ⁻ᵇ</div>
+                                <div class="cs-card">(xᵃ)ᵇ = xᵃ·ᵇ</div>
+                                <div class="cs-card">x⁻ᵃ = 1 / xᵃ</div>
+                                <div class="cs-card">x⁰ = 1 (x ≠ 0)</div>
+                                <div class="cs-card">(xy)ᵃ = xᵃyᵃ</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-radicals" class="cs-section">
+                            <h3 class="cs-header">Radical Rules</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">√(ab) = √a · √b</div>
+                                <div class="cs-card">√(a/b) = √a / √b</div>
+                                <div class="cs-card">x^(a/b) = ᵇ√(xᵃ)</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-log" class="cs-section">
+                            <h3 class="cs-header">Logarithm Rules</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">log(ab) = log(a) + log(b)</div>
+                                <div class="cs-card">log(a/b) = log(a) - log(b)</div>
+                                <div class="cs-card">log(aᵇ) = b·log(a)</div>
+                                <div class="cs-card">logₐ(a) = 1</div>
+                                <div class="cs-card">logₐ(1) = 0</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-derivatives" class="cs-section">
+                            <h3 class="cs-header">Derivatives</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">d/dx (c) = 0</div>
+                                <div class="cs-card">d/dx (xⁿ) = n·xⁿ⁻¹</div>
+                                <div class="cs-card">d/dx (sin x) = cos x</div>
+                                <div class="cs-card">d/dx (cos x) = -sin x</div>
+                                <div class="cs-card">d/dx (eˣ) = eˣ</div>
+                                <div class="cs-card">d/dx (ln x) = 1/x</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-integrals" class="cs-section">
+                            <h3 class="cs-header">Integrals</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">∫ xⁿ dx = (xⁿ⁺¹) / (n+1) + C</div>
+                                <div class="cs-card">∫ sin x dx = -cos x + C</div>
+                                <div class="cs-card">∫ cos x dx = sin x + C</div>
+                                <div class="cs-card">∫ eˣ dx = eˣ + C</div>
+                                <div class="cs-card">∫ (1/x) dx = ln|x| + C</div>
+                            </div>
+                        </div>
+
+                        <div id="cs-trig" class="cs-section">
+                            <h3 class="cs-header">Trigonometric Identities</h3>
+                            <div class="cs-grid">
+                                <div class="cs-card">sin²(x) + cos²(x) = 1</div>
+                                <div class="cs-card">tan(x) = sin(x) / cos(x)</div>
+                                <div class="cs-card">cot(x) = cos(x) / sin(x)</div>
+                                <div class="cs-card">sin(2x) = 2·sin(x)·cos(x)</div>
+                                <div class="cs-card">cos(2x) = cos²(x) - sin²(x)</div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
-            <!-- 2. Calculators (Combined Basic, Algebra, Trigo, Geometry) -->
-            <div id="calculators" class="tab-content scrollable">
-                <div class="shape-selector">
-                    <select id="calc-category" class="styled-input full-width" onchange="changeCalcCategory()">
-                        <option value="basic-calc">Basic Calculator</option>
-                        <optgroup label="Algebra">
-                            <option value="alg-quadratic">Quadratic Equation</option>
-                            <option value="alg-linear">Linear Equations (2 Var)</option>
-                            <option value="alg-distance">Distance Between Points</option>
-                            <option value="alg-midpoint">Midpoint Between Points</option>
-                        </optgroup>
-                        <option value="trigo-calc">Trigonometry</option>
-                        <optgroup label="Geometry">
-                            <option value="geom-circle">Circle</option>
-                            <option value="geom-rectangle">Rectangle</option>
-                            <option value="geom-triangle">Triangle</option>
-                            <option value="geom-sphere">Sphere</option>
-                            <option value="geom-cylinder">Cylinder</option>
-                            <option value="geom-cube">Cube</option>
-                        </optgroup>
-                    </select>
-                </div>
+            <!-- 4. Calculators (Combined Basic, Algebra, Trigo, Geometry) -->
+            <div id="calculators" class="tab-content">
+                <div class="full-page-container flex-col-center">
+                    <div class="centered-content-box">
+                        <div class="shape-selector">
+                            <select id="calc-category" class="styled-input full-width" onchange="changeCalcCategory()">
+                                <option value="basic-calc">Basic Calculator</option>
+                                <optgroup label="Algebra">
+                                    <option value="alg-quadratic">Quadratic Equation</option>
+                                    <option value="alg-linear">Linear Equations (2 Var)</option>
+                                    <option value="alg-distance">Distance Between Points</option>
+                                    <option value="alg-midpoint">Midpoint Between Points</option>
+                                </optgroup>
+                                <option value="trigo-calc">Trigonometry</option>
+                                <optgroup label="Geometry">
+                                    <option value="geom-circle">Circle</option>
+                                    <option value="geom-rectangle">Rectangle</option>
+                                    <option value="geom-triangle">Triangle</option>
+                                    <option value="geom-sphere">Sphere</option>
+                                    <option value="geom-cylinder">Cylinder</option>
+                                    <option value="geom-cube">Cube</option>
+                                </optgroup>
+                            </select>
+                        </div>
 
-                <!-- Basic Calc Area -->
-                <div id="basic-calc" class="calc-section">
-                    <div class="calc-display">
-                        <div id="basic-expr" class="calc-expr"></div>
-                        <div id="basic-res" class="calc-res">0</div>
-                    </div>
-                    <div class="calc-grid">
-                        <button class="calc-btn op-btn" onclick="basicAction('AC')">AC</button>
-                        <button class="calc-btn op-btn" onclick="basicAction('(')">(</button>
-                        <button class="calc-btn op-btn" onclick="basicAction(')')">)</button>
-                        <button class="calc-btn op-btn" onclick="basicAction('/')">÷</button>
-                        <button class="calc-btn" onclick="basicAction('7')">7</button>
-                        <button class="calc-btn" onclick="basicAction('8')">8</button>
-                        <button class="calc-btn" onclick="basicAction('9')">9</button>
-                        <button class="calc-btn op-btn" onclick="basicAction('*')">×</button>
-                        <button class="calc-btn" onclick="basicAction('4')">4</button>
-                        <button class="calc-btn" onclick="basicAction('5')">5</button>
-                        <button class="calc-btn" onclick="basicAction('6')">6</button>
-                        <button class="calc-btn op-btn" onclick="basicAction('-')">-</button>
-                        <button class="calc-btn" onclick="basicAction('1')">1</button>
-                        <button class="calc-btn" onclick="basicAction('2')">2</button>
-                        <button class="calc-btn" onclick="basicAction('3')">3</button>
-                        <button class="calc-btn op-btn" onclick="basicAction('+')">+</button>
-                        <button class="calc-btn" onclick="basicAction('0')">0</button>
-                        <button class="calc-btn" onclick="basicAction('.')">.</button>
-                        <button class="calc-btn op-btn" onclick="basicAction('DEL')">⌫</button>
-                        <button class="calc-btn eval-btn" onclick="basicAction('=')">=</button>
-                    </div>
-                </div>
+                        <!-- Basic Calc Area -->
+                        <div id="basic-calc" class="calc-section">
+                            <div class="calc-display">
+                                <div id="basic-expr" class="calc-expr"></div>
+                                <div id="basic-res" class="calc-res">0</div>
+                            </div>
+                            <div class="calc-grid">
+                                <button class="calc-btn op-btn" onclick="basicAction('AC')">AC</button>
+                                <button class="calc-btn op-btn" onclick="basicAction('(')">(</button>
+                                <button class="calc-btn op-btn" onclick="basicAction(')')">)</button>
+                                <button class="calc-btn op-btn" onclick="basicAction('/')">÷</button>
+                                <button class="calc-btn" onclick="basicAction('7')">7</button>
+                                <button class="calc-btn" onclick="basicAction('8')">8</button>
+                                <button class="calc-btn" onclick="basicAction('9')">9</button>
+                                <button class="calc-btn op-btn" onclick="basicAction('*')">×</button>
+                                <button class="calc-btn" onclick="basicAction('4')">4</button>
+                                <button class="calc-btn" onclick="basicAction('5')">5</button>
+                                <button class="calc-btn" onclick="basicAction('6')">6</button>
+                                <button class="calc-btn op-btn" onclick="basicAction('-')">-</button>
+                                <button class="calc-btn" onclick="basicAction('1')">1</button>
+                                <button class="calc-btn" onclick="basicAction('2')">2</button>
+                                <button class="calc-btn" onclick="basicAction('3')">3</button>
+                                <button class="calc-btn op-btn" onclick="basicAction('+')">+</button>
+                                <button class="calc-btn" onclick="basicAction('0')">0</button>
+                                <button class="calc-btn" onclick="basicAction('.')">.</button>
+                                <button class="calc-btn op-btn" onclick="basicAction('DEL')">⌫</button>
+                                <button class="calc-btn eval-btn" onclick="basicAction('=')">=</button>
+                            </div>
+                        </div>
 
-                <!-- Algebra Sub-sections -->
-                <div id="alg-quadratic" class="calc-section hidden">
-                    <p class="formula">ax² + bx + c = 0</p>
-                    <div class="input-group-row">
-                        <input type="number" id="quad-a" placeholder="a" class="styled-input">
-                        <input type="number" id="quad-b" placeholder="b" class="styled-input">
-                        <input type="number" id="quad-c" placeholder="c" class="styled-input">
-                    </div>
-                    <button class="action-btn" onclick="solveQuadratic()">Solve</button>
-                    <div id="quad-res" class="result-box"></div>
-                </div>
+                        <!-- Algebra Sub-sections -->
+                        <div id="alg-quadratic" class="calc-section hidden">
+                            <p class="formula">ax² + bx + c = 0</p>
+                            <div class="input-group-row">
+                                <input type="number" id="quad-a" placeholder="a" class="styled-input">
+                                <input type="number" id="quad-b" placeholder="b" class="styled-input">
+                                <input type="number" id="quad-c" placeholder="c" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn" onclick="solveQuadratic()">Solve</button>
+                            <div id="quad-res" class="result-box"></div>
+                        </div>
 
-                <div id="alg-linear" class="calc-section hidden">
-                    <p class="formula">a₁x + b₁y = c₁ <br> a₂x + b₂y = c₂</p>
-                    <div class="input-group-row">
-                        <input type="number" id="lin-a1" placeholder="a₁" class="styled-input">
-                        <input type="number" id="lin-b1" placeholder="b₁" class="styled-input">
-                        <input type="number" id="lin-c1" placeholder="c₁" class="styled-input">
-                    </div>
-                    <div class="input-group-row">
-                        <input type="number" id="lin-a2" placeholder="a₂" class="styled-input">
-                        <input type="number" id="lin-b2" placeholder="b₂" class="styled-input">
-                        <input type="number" id="lin-c2" placeholder="c₂" class="styled-input">
-                    </div>
-                    <button class="action-btn" onclick="solveLinear()">Solve</button>
-                    <div id="lin-res" class="result-box"></div>
-                </div>
+                        <div id="alg-linear" class="calc-section hidden">
+                            <p class="formula">a₁x + b₁y = c₁ <br> a₂x + b₂y = c₂</p>
+                            <div class="input-group-row">
+                                <input type="number" id="lin-a1" placeholder="a₁" class="styled-input">
+                                <input type="number" id="lin-b1" placeholder="b₁" class="styled-input">
+                                <input type="number" id="lin-c1" placeholder="c₁" class="styled-input">
+                            </div>
+                            <div class="input-group-row">
+                                <input type="number" id="lin-a2" placeholder="a₂" class="styled-input">
+                                <input type="number" id="lin-b2" placeholder="b₂" class="styled-input">
+                                <input type="number" id="lin-c2" placeholder="c₂" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn" onclick="solveLinear()">Solve</button>
+                            <div id="lin-res" class="result-box"></div>
+                        </div>
 
-                <div id="alg-distance" class="calc-section hidden">
-                    <div class="input-group-row">
-                        <input type="number" id="dist-x1" placeholder="x₁" class="styled-input">
-                        <input type="number" id="dist-y1" placeholder="y₁" class="styled-input">
-                    </div>
-                    <div class="input-group-row">
-                        <input type="number" id="dist-x2" placeholder="x₂" class="styled-input">
-                        <input type="number" id="dist-y2" placeholder="y₂" class="styled-input">
-                    </div>
-                    <button class="action-btn" onclick="solveDistance()">Calculate Distance</button>
-                    <div id="dist-res" class="result-box"></div>
-                </div>
+                        <div id="alg-distance" class="calc-section hidden">
+                            <div class="input-group-row">
+                                <input type="number" id="dist-x1" placeholder="x₁" class="styled-input">
+                                <input type="number" id="dist-y1" placeholder="y₁" class="styled-input">
+                            </div>
+                            <div class="input-group-row">
+                                <input type="number" id="dist-x2" placeholder="x₂" class="styled-input">
+                                <input type="number" id="dist-y2" placeholder="y₂" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn" onclick="solveDistance()">Calculate Distance</button>
+                            <div id="dist-res" class="result-box"></div>
+                        </div>
 
-                <div id="alg-midpoint" class="calc-section hidden">
-                    <div class="input-group-row">
-                        <input type="number" id="mid-x1" placeholder="x₁" class="styled-input">
-                        <input type="number" id="mid-y1" placeholder="y₁" class="styled-input">
+                        <div id="alg-midpoint" class="calc-section hidden">
+                            <div class="input-group-row">
+                                <input type="number" id="mid-x1" placeholder="x₁" class="styled-input">
+                                <input type="number" id="mid-y1" placeholder="y₁" class="styled-input">
+                            </div>
+                            <div class="input-group-row">
+                                <input type="number" id="mid-x2" placeholder="x₂" class="styled-input">
+                                <input type="number" id="mid-y2" placeholder="y₂" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn" onclick="solveMidpoint()">Calculate Midpoint</button>
+                            <div id="mid-res" class="result-box"></div>
+                        </div>
+
+                        <!-- Trigo Section -->
+                        <div id="trigo-calc" class="calc-section hidden">
+                            <div class="toggle-group">
+                                <button id="deg-btn" class="toggle-btn active" onclick="setAngleMode('deg')">Degrees</button>
+                                <button id="rad-btn" class="toggle-btn" onclick="setAngleMode('rad')">Radians</button>
+                            </div>
+                            <input type="number" id="trig-input" placeholder="Enter value" class="styled-input full-width">
+                            <div class="trig-grid">
+                                <button class="action-btn" onclick="calcTrig('sin')">sin</button>
+                                <button class="action-btn" onclick="calcTrig('cos')">cos</button>
+                                <button class="action-btn" onclick="calcTrig('tan')">tan</button>
+                                <button class="action-btn" onclick="calcTrig('asin')">sin⁻¹</button>
+                                <button class="action-btn" onclick="calcTrig('acos')">cos⁻¹</button>
+                                <button class="action-btn" onclick="calcTrig('atan')">tan⁻¹</button>
+                            </div>
+                            <div id="trig-res" class="result-box large-result"></div>
+                        </div>
+
+                        <!-- Geometry Sections -->
+                        <div id="geom-circle" class="calc-section hidden">
+                            <input type="number" id="circ-r" placeholder="Radius (r)" class="styled-input full-width">
+                            <button class="action-btn red-btn full-width" onclick="calcGeometry('circle')">Calculate</button>
+                        </div>
+
+                        <div id="geom-rectangle" class="calc-section hidden">
+                            <div class="input-group-row">
+                                <input type="number" id="rect-w" placeholder="Width" class="styled-input">
+                                <input type="number" id="rect-h" placeholder="Height" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn full-width" onclick="calcGeometry('rectangle')">Calculate</button>
+                        </div>
+
+                        <div id="geom-triangle" class="calc-section hidden">
+                            <div class="input-group-row">
+                                <input type="number" id="tri-b" placeholder="Base" class="styled-input">
+                                <input type="number" id="tri-h" placeholder="Height" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn full-width" onclick="calcGeometry('triangle')">Calculate</button>
+                        </div>
+
+                        <div id="geom-sphere" class="calc-section hidden">
+                            <input type="number" id="sphere-r" placeholder="Radius (r)" class="styled-input full-width">
+                            <button class="action-btn red-btn full-width" onclick="calcGeometry('sphere')">Calculate</button>
+                        </div>
+
+                        <div id="geom-cylinder" class="calc-section hidden">
+                            <div class="input-group-row">
+                                <input type="number" id="cyl-r" placeholder="Radius" class="styled-input">
+                                <input type="number" id="cyl-h" placeholder="Height" class="styled-input">
+                            </div>
+                            <button class="action-btn red-btn full-width" onclick="calcGeometry('cylinder')">Calculate</button>
+                        </div>
+
+                        <div id="geom-cube" class="calc-section hidden">
+                            <input type="number" id="cube-s" placeholder="Side Length (s)" class="styled-input full-width">
+                            <button class="action-btn red-btn full-width" onclick="calcGeometry('cube')">Calculate</button>
+                        </div>
+                        
+                        <div id="geom-res" class="result-box"></div>
                     </div>
-                    <div class="input-group-row">
-                        <input type="number" id="mid-x2" placeholder="x₂" class="styled-input">
-                        <input type="number" id="mid-y2" placeholder="y₂" class="styled-input">
-                    </div>
-                    <button class="action-btn" onclick="solveMidpoint()">Calculate Midpoint</button>
-                    <div id="mid-res" class="result-box"></div>
-                </div>
-
-                <!-- Trigo Section -->
-                <div id="trigo-calc" class="calc-section hidden">
-                    <div class="toggle-group">
-                        <button id="deg-btn" class="toggle-btn active" onclick="setAngleMode('deg')">Degrees</button>
-                        <button id="rad-btn" class="toggle-btn" onclick="setAngleMode('rad')">Radians</button>
-                    </div>
-                    <input type="number" id="trig-input" placeholder="Enter value" class="styled-input full-width">
-                    <div class="trig-grid">
-                        <button class="action-btn" onclick="calcTrig('sin')">sin</button>
-                        <button class="action-btn" onclick="calcTrig('cos')">cos</button>
-                        <button class="action-btn" onclick="calcTrig('tan')">tan</button>
-                        <button class="action-btn" onclick="calcTrig('asin')">sin⁻¹</button>
-                        <button class="action-btn" onclick="calcTrig('acos')">cos⁻¹</button>
-                        <button class="action-btn" onclick="calcTrig('atan')">tan⁻¹</button>
-                    </div>
-                    <div id="trig-res" class="result-box large-result"></div>
-                </div>
-
-                <!-- Geometry Sections -->
-                <div id="geom-circle" class="calc-section hidden">
-                    <input type="number" id="circ-r" placeholder="Radius (r)" class="styled-input full-width">
-                    <button class="action-btn full-width" onclick="calcGeometry('circle')">Calculate</button>
-                </div>
-
-                <div id="geom-rectangle" class="calc-section hidden">
-                    <div class="input-group-row">
-                        <input type="number" id="rect-w" placeholder="Width" class="styled-input">
-                        <input type="number" id="rect-h" placeholder="Height" class="styled-input">
-                    </div>
-                    <button class="action-btn full-width" onclick="calcGeometry('rectangle')">Calculate</button>
-                </div>
-
-                <div id="geom-triangle" class="calc-section hidden">
-                    <div class="input-group-row">
-                        <input type="number" id="tri-b" placeholder="Base" class="styled-input">
-                        <input type="number" id="tri-h" placeholder="Height" class="styled-input">
-                    </div>
-                    <button class="action-btn full-width" onclick="calcGeometry('triangle')">Calculate</button>
-                </div>
-
-                <div id="geom-sphere" class="calc-section hidden">
-                    <input type="number" id="sphere-r" placeholder="Radius (r)" class="styled-input full-width">
-                    <button class="action-btn full-width" onclick="calcGeometry('sphere')">Calculate</button>
-                </div>
-
-                <div id="geom-cylinder" class="calc-section hidden">
-                    <div class="input-group-row">
-                        <input type="number" id="cyl-r" placeholder="Radius" class="styled-input">
-                        <input type="number" id="cyl-h" placeholder="Height" class="styled-input">
-                    </div>
-                    <button class="action-btn full-width" onclick="calcGeometry('cylinder')">Calculate</button>
-                </div>
-
-                <div id="geom-cube" class="calc-section hidden">
-                    <input type="number" id="cube-s" placeholder="Side Length (s)" class="styled-input full-width">
-                    <button class="action-btn full-width" onclick="calcGeometry('cube')">Calculate</button>
-                </div>
-                
-                <div id="geom-res" class="result-box"></div>
-            </div>
-
-            <!-- 3. Graphing Calculator -->
-            <div id="graphing" class="tab-content">
-                <p class="subtitle">Enter an expression like <code>x^2</code> or <code>sin(x)</code></p>
-                <div class="chat-input-area">
-                    <span style="font-size:1.2rem; margin-top:8px; font-weight:bold;">f(x) = </span>
-                    <input type="text" id="graph-input" value="x^2" class="styled-input">
-                    <button class="action-btn gpt-send-btn" onclick="drawGraph()">Plot</button>
-                </div>
-                <div id="plot-container" class="plot-box">
-                    <div id="plot"></div>
                 </div>
             </div>
 
-            <!-- 4. Verify -->
+            <!-- 5. Verify -->
             <div id="verify" class="tab-content">
-                <p class="subtitle">Check if two mathematical expressions are mathematically equivalent.</p>
-                
-                <div class="section-card">
-                    <label>Expression 1</label>
-                    <input type="text" id="verify-ex1" class="styled-input full-width" placeholder="e.g. x^2 - 1">
-                    
-                    <label>Expression 2</label>
-                    <input type="text" id="verify-ex2" class="styled-input full-width" placeholder="e.g. (x-1)(x+1)">
-                    
-                    <button class="action-btn" onclick="verifyExpressions()">Verify Identity</button>
-                </div>
-                <div id="verify-res" class="result-box large-result"></div>
-            </div>
-
-            <!-- 5. Cheat Sheets -->
-            <div id="sheets" class="tab-content scrollable">
-                <div class="cheatsheet-card">
-                    <h4>Exponent Rules</h4>
-                    <ul>
-                        <li>xᵃ · xᵇ = xᵃ⁺ᵇ</li>
-                        <li>xᵃ / xᵇ = xᵃ⁻ᵇ</li>
-                        <li>(xᵃ)ᵇ = xᵃ·ᵇ</li>
-                        <li>x⁻ᵃ = 1 / xᵃ</li>
-                    </ul>
-                </div>
-                <div class="cheatsheet-card">
-                    <h4>Logarithm Rules</h4>
-                    <ul>
-                        <li>log(a·b) = log(a) + log(b)</li>
-                        <li>log(a/b) = log(a) - log(b)</li>
-                        <li>log(aᵇ) = b·log(a)</li>
-                    </ul>
-                </div>
-                <div class="cheatsheet-card">
-                    <h4>Trig Identities</h4>
-                    <ul>
-                        <li>sin²(x) + cos²(x) = 1</li>
-                        <li>tan(x) = sin(x) / cos(x)</li>
-                        <li>sin(2x) = 2·sin(x)·cos(x)</li>
-                    </ul>
-                </div>
-                <div class="cheatsheet-card">
-                    <h4>Derivatives</h4>
-                    <ul>
-                        <li>d/dx (xⁿ) = n·xⁿ⁻¹</li>
-                        <li>d/dx (sin x) = cos x</li>
-                        <li>d/dx (eˣ) = eˣ</li>
-                    </ul>
+                <div class="full-page-container flex-col-center">
+                    <div class="centered-content-box">
+                        <h2 class="page-title text-center">Verify Identity</h2>
+                        <p class="subtitle text-center">Check if two mathematical expressions are equivalent.</p>
+                        
+                        <div class="section-card mt-20">
+                            <label>Expression 1</label>
+                            <input type="text" id="verify-ex1" class="styled-input full-width" placeholder="e.g. x^2 - 1">
+                            
+                            <label>Expression 2</label>
+                            <input type="text" id="verify-ex2" class="styled-input full-width" placeholder="e.g. (x-1)(x+1)">
+                            
+                            <button class="action-btn red-btn full-width" onclick="verifyExpressions()">Verify Identity</button>
+                        </div>
+                        <div id="verify-res" class="result-box large-result"></div>
+                    </div>
                 </div>
             </div>
 
             <!-- 6. Worksheets -->
             <div id="worksheets" class="tab-content">
-                <p class="subtitle">Generate Pre-Algebra practice problems to solve mentally or on paper.</p>
-                <div class="section-card center-text">
-                    <button class="action-btn eval-btn full-width" onclick="generateProblem()">Generate New Problem</button>
-                    
-                    <div id="worksheet-problem" class="problem-display">Click generate to start.</div>
-                    
-                    <button id="show-answer-btn" class="action-btn hidden" onclick="showProblemAnswer()">Reveal Answer</button>
-                    <div id="worksheet-answer" class="result-box large-result"></div>
+                <div class="full-page-container flex-col-center">
+                    <div class="centered-content-box">
+                        <h2 class="page-title text-center">Practice Worksheets</h2>
+                        <p class="subtitle text-center">Generate Pre-Algebra practice problems.</p>
+                        
+                        <div class="section-card center-text mt-20">
+                            <button class="action-btn red-btn full-width" onclick="generateProblem()">Generate New Problem</button>
+                            
+                            <div id="worksheet-problem" class="problem-display">Click generate to start.</div>
+                            
+                            <button id="show-answer-btn" class="action-btn hidden" onclick="showProblemAnswer()">Reveal Answer</button>
+                            <div id="worksheet-answer" class="result-box large-result"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-        </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
