@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Maths Solver Widget</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="widget-container">
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-target="basic">Basic</button>
+            <button class="tab-btn" data-target="algebra">Algebra</button>
+            <button class="tab-btn" data-target="trigo">Trigonometry</button>
+            <button class="tab-btn" data-target="geometry">Geometry</button>
+        </nav>
+
+        <!-- Tab Contents -->
+        <div class="tab-content-container">
+            
+            <!-- Basic Calculator -->
+            <div id="basic" class="tab-content active">
+                <div class="calc-display">
+                    <div id="basic-expr" class="calc-expr"></div>
+                    <div id="basic-res" class="calc-res">0</div>
+                </div>
+                <div class="calc-grid">
+                    <button class="calc-btn op-btn" onclick="basicAction('AC')">AC</button>
+                    <button class="calc-btn op-btn" onclick="basicAction('(')">(</button>
+                    <button class="calc-btn op-btn" onclick="basicAction(')')">)</button>
+                    <button class="calc-btn op-btn" onclick="basicAction('/')">÷</button>
+                    
+                    <button class="calc-btn" onclick="basicAction('7')">7</button>
+                    <button class="calc-btn" onclick="basicAction('8')">8</button>
+                    <button class="calc-btn" onclick="basicAction('9')">9</button>
+                    <button class="calc-btn op-btn" onclick="basicAction('*')">×</button>
+                    
+                    <button class="calc-btn" onclick="basicAction('4')">4</button>
+                    <button class="calc-btn" onclick="basicAction('5')">5</button>
+                    <button class="calc-btn" onclick="basicAction('6')">6</button>
+                    <button class="calc-btn op-btn" onclick="basicAction('-')">-</button>
+                    
+                    <button class="calc-btn" onclick="basicAction('1')">1</button>
+                    <button class="calc-btn" onclick="basicAction('2')">2</button>
+                    <button class="calc-btn" onclick="basicAction('3')">3</button>
+                    <button class="calc-btn op-btn" onclick="basicAction('+')">+</button>
+                    
+                    <button class="calc-btn" onclick="basicAction('0')">0</button>
+                    <button class="calc-btn" onclick="basicAction('.')">.</button>
+                    <button class="calc-btn op-btn" onclick="basicAction('DEL')">⌫</button>
+                    <button class="calc-btn eval-btn" onclick="basicAction('=')">=</button>
+                </div>
+            </div>
+
+            <!-- Algebra Solver -->
+            <div id="algebra" class="tab-content scrollable">
+                <div class="shape-selector">
+                    <select id="algebra-select" class="styled-input full-width" onchange="changeAlgebra()">
+                        <option value="quadratic">Quadratic Equation</option>
+                        <option value="linear">Linear Equations (2 Var)</option>
+                        <option value="distance">Distance Between Points</option>
+                        <option value="midpoint">Midpoint Between Points</option>
+                    </select>
+                </div>
+
+                <!-- Quadratic -->
+                <div id="alg-quadratic" class="section-card">
+                    <p class="formula">ax² + bx + c = 0</p>
+                    <div class="input-group-row">
+                        <input type="number" id="quad-a" placeholder="a" class="styled-input">
+                        <input type="number" id="quad-b" placeholder="b" class="styled-input">
+                        <input type="number" id="quad-c" placeholder="c" class="styled-input">
+                    </div>
+                    <button class="action-btn" onclick="solveQuadratic()">Solve</button>
+                    <div id="quad-res" class="result-box"></div>
+                </div>
+
+                <!-- Linear System -->
+                <div id="alg-linear" class="section-card hidden">
+                    <p class="formula">a₁x + b₁y = c₁ <br> a₂x + b₂y = c₂</p>
+                    <div class="input-group-row">
+                        <input type="number" id="lin-a1" placeholder="a₁" class="styled-input">
+                        <input type="number" id="lin-b1" placeholder="b₁" class="styled-input">
+                        <input type="number" id="lin-c1" placeholder="c₁" class="styled-input">
+                    </div>
+                    <div class="input-group-row">
+                        <input type="number" id="lin-a2" placeholder="a₂" class="styled-input">
+                        <input type="number" id="lin-b2" placeholder="b₂" class="styled-input">
+                        <input type="number" id="lin-c2" placeholder="c₂" class="styled-input">
+                    </div>
+                    <button class="action-btn" onclick="solveLinear()">Solve</button>
+                    <div id="lin-res" class="result-box"></div>
+                </div>
+
+                <!-- Distance -->
+                <div id="alg-distance" class="section-card hidden">
+                    <p class="formula">d = √((x₂-x₁)² + (y₂-y₁)²)</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 8px; color: var(--text-secondary);">Point 1</p>
+                    <div class="input-group-row">
+                        <input type="number" id="dist-x1" placeholder="x₁" class="styled-input">
+                        <input type="number" id="dist-y1" placeholder="y₁" class="styled-input">
+                    </div>
+                    <p style="font-size: 0.9rem; margin-bottom: 8px; color: var(--text-secondary);">Point 2</p>
+                    <div class="input-group-row">
+                        <input type="number" id="dist-x2" placeholder="x₂" class="styled-input">
+                        <input type="number" id="dist-y2" placeholder="y₂" class="styled-input">
+                    </div>
+                    <button class="action-btn" onclick="solveDistance()">Calculate Distance</button>
+                    <div id="dist-res" class="result-box"></div>
+                </div>
+
+                <!-- Midpoint -->
+                <div id="alg-midpoint" class="section-card hidden">
+                    <p class="formula">M = ((x₁+x₂)/2 , (y₁+y₂)/2)</p>
+                    <p style="font-size: 0.9rem; margin-bottom: 8px; color: var(--text-secondary);">Point 1</p>
+                    <div class="input-group-row">
+                        <input type="number" id="mid-x1" placeholder="x₁" class="styled-input">
+                        <input type="number" id="mid-y1" placeholder="y₁" class="styled-input">
+                    </div>
+                    <p style="font-size: 0.9rem; margin-bottom: 8px; color: var(--text-secondary);">Point 2</p>
+                    <div class="input-group-row">
+                        <input type="number" id="mid-x2" placeholder="x₂" class="styled-input">
+                        <input type="number" id="mid-y2" placeholder="y₂" class="styled-input">
+                    </div>
+                    <button class="action-btn" onclick="solveMidpoint()">Calculate Midpoint</button>
+                    <div id="mid-res" class="result-box"></div>
+                </div>
+            </div>
+
+            <!-- Trigonometry -->
+            <div id="trigo" class="tab-content">
+                <div class="section-card">
+                    <div class="toggle-group">
+                        <button id="deg-btn" class="toggle-btn active" onclick="setAngleMode('deg')">Degrees</button>
+                        <button id="rad-btn" class="toggle-btn" onclick="setAngleMode('rad')">Radians</button>
+                    </div>
+                    <input type="number" id="trig-input" placeholder="Enter value" class="styled-input full-width">
+                    
+                    <div class="trig-grid">
+                        <button class="action-btn" onclick="calcTrig('sin')">sin</button>
+                        <button class="action-btn" onclick="calcTrig('cos')">cos</button>
+                        <button class="action-btn" onclick="calcTrig('tan')">tan</button>
+                        <button class="action-btn" onclick="calcTrig('asin')">sin⁻¹</button>
+                        <button class="action-btn" onclick="calcTrig('acos')">cos⁻¹</button>
+                        <button class="action-btn" onclick="calcTrig('atan')">tan⁻¹</button>
+                    </div>
+                    <div id="trig-res" class="result-box large-result"></div>
+                </div>
+            </div>
+
+            <!-- Geometry -->
+            <div id="geometry" class="tab-content scrollable">
+                <div class="shape-selector">
+                    <select id="shape-select" class="styled-input full-width" onchange="changeShape()">
+                        <optgroup label="2D Shapes">
+                            <option value="circle">Circle</option>
+                            <option value="rectangle">Rectangle</option>
+                            <option value="triangle">Triangle</option>
+                        </optgroup>
+                        <optgroup label="3D Shapes">
+                            <option value="sphere">Sphere</option>
+                            <option value="cylinder">Cylinder</option>
+                            <option value="cube">Cube</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <!-- Circle Inputs -->
+                <div id="geom-circle" class="shape-inputs">
+                    <input type="number" id="circ-r" placeholder="Radius (r)" class="styled-input full-width">
+                </div>
+
+                <!-- Rectangle Inputs -->
+                <div id="geom-rectangle" class="shape-inputs hidden">
+                    <div class="input-group-row">
+                        <input type="number" id="rect-w" placeholder="Width (w)" class="styled-input">
+                        <input type="number" id="rect-h" placeholder="Height (h)" class="styled-input">
+                    </div>
+                </div>
+
+                <!-- Triangle Inputs -->
+                <div id="geom-triangle" class="shape-inputs hidden">
+                    <div class="input-group-row">
+                        <input type="number" id="tri-b" placeholder="Base (b)" class="styled-input">
+                        <input type="number" id="tri-h" placeholder="Height (h)" class="styled-input">
+                    </div>
+                </div>
+
+                <!-- Sphere Inputs -->
+                <div id="geom-sphere" class="shape-inputs hidden">
+                    <input type="number" id="sphere-r" placeholder="Radius (r)" class="styled-input full-width">
+                </div>
+
+                <!-- Cylinder Inputs -->
+                <div id="geom-cylinder" class="shape-inputs hidden">
+                    <div class="input-group-row">
+                        <input type="number" id="cyl-r" placeholder="Radius (r)" class="styled-input">
+                        <input type="number" id="cyl-h" placeholder="Height (h)" class="styled-input">
+                    </div>
+                </div>
+
+                <!-- Cube Inputs -->
+                <div id="geom-cube" class="shape-inputs hidden">
+                    <input type="number" id="cube-s" placeholder="Side Length (s)" class="styled-input full-width">
+                </div>
+
+                <button class="action-btn full-width" onclick="calcGeometry()">Calculate</button>
+                <div id="geom-res" class="result-box"></div>
+            </div>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
