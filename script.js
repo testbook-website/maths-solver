@@ -38,9 +38,8 @@ function basicAction(action) {
     if (action === '=') {
         try {
             if (!currentExpr) return;
-            // Extremely basic evaluation. In production, use a math parser.
-            const result = eval(currentExpr);
-            // Format to avoid long decimals
+            // Use math.js if available, fallback to eval
+            const result = typeof math !== 'undefined' ? math.evaluate(currentExpr) : eval(currentExpr);
             resDisplay.innerText = Number.isInteger(result) ? result : parseFloat(result.toFixed(8));
         } catch (e) {
             resDisplay.innerText = 'Error';
@@ -74,7 +73,6 @@ function changeAlgebra() {
     
     document.getElementById(`alg-${alg}`).classList.remove('hidden');
     
-    // Hide all previous results
     document.getElementById('quad-res').style.display = 'none';
     document.getElementById('lin-res').style.display = 'none';
     document.getElementById('dist-res').style.display = 'none';
@@ -90,12 +88,10 @@ function solveQuadratic() {
         showResult('quad-res', 'Please enter all values (a, b, c).', true);
         return;
     }
-
     if (a === 0) {
         showResult('quad-res', 'If a=0, it is not a quadratic equation.', true);
         return;
     }
-
     const delta = b * b - 4 * a * c;
     if (delta > 0) {
         const x1 = (-b + Math.sqrt(delta)) / (2 * a);
@@ -140,11 +136,7 @@ function solveDistance() {
     const x2 = parseFloat(document.getElementById('dist-x2').value);
     const y2 = parseFloat(document.getElementById('dist-y2').value);
 
-    if ([x1,y1,x2,y2].some(isNaN)) {
-        showResult('dist-res', 'Please enter all coordinates.', true);
-        return;
-    }
-
+    if ([x1,y1,x2,y2].some(isNaN)) { showResult('dist-res', 'Please enter all coordinates.', true); return; }
     const dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     showResult('dist-res', `Distance = ${dist.toFixed(4)}`);
 }
@@ -155,11 +147,7 @@ function solveMidpoint() {
     const x2 = parseFloat(document.getElementById('mid-x2').value);
     const y2 = parseFloat(document.getElementById('mid-y2').value);
 
-    if ([x1,y1,x2,y2].some(isNaN)) {
-        showResult('mid-res', 'Please enter all coordinates.', true);
-        return;
-    }
-
+    if ([x1,y1,x2,y2].some(isNaN)) { showResult('mid-res', 'Please enter all coordinates.', true); return; }
     const mx = (x1 + x2) / 2;
     const my = (y1 + y2) / 2;
     showResult('mid-res', `Midpoint = (${mx.toFixed(4)}, ${my.toFixed(4)})`);
@@ -176,10 +164,7 @@ function setAngleMode(mode) {
 
 function calcTrig(op) {
     const val = parseFloat(document.getElementById('trig-input').value);
-    if (isNaN(val)) {
-        showResult('trig-res', 'Enter a valid number.', true);
-        return;
-    }
+    if (isNaN(val)) { showResult('trig-res', 'Enter a valid number.', true); return; }
 
     let result = 0;
     const isDeg = angleMode === 'deg';
@@ -189,29 +174,18 @@ function calcTrig(op) {
         case 'sin': result = Math.sin(inputRad); break;
         case 'cos': result = Math.cos(inputRad); break;
         case 'tan': 
-            if (isDeg && val % 180 === 90) {
-                showResult('trig-res', 'Undefined', true);
-                return;
-            }
-            result = Math.tan(inputRad); 
-            break;
+            if (isDeg && val % 180 === 90) { showResult('trig-res', 'Undefined', true); return; }
+            result = Math.tan(inputRad); break;
         case 'asin': 
             if(val < -1 || val > 1) { showResult('trig-res', 'Domain Error', true); return; }
-            result = Math.asin(val); 
-            break;
+            result = Math.asin(val); break;
         case 'acos': 
             if(val < -1 || val > 1) { showResult('trig-res', 'Domain Error', true); return; }
-            result = Math.acos(val); 
-            break;
-        case 'atan': 
-            result = Math.atan(val); 
-            break;
+            result = Math.acos(val); break;
+        case 'atan': result = Math.atan(val); break;
     }
 
-    if (op.startsWith('a') && isDeg) {
-        result = result * (180 / Math.PI);
-    }
-
+    if (op.startsWith('a') && isDeg) { result = result * (180 / Math.PI); }
     if (Math.abs(result) < 1e-10) result = 0;
     
     showResult('trig-res', `${op}(${val}) = <strong>${parseFloat(result.toFixed(6))}</strong>`);
@@ -223,7 +197,6 @@ function changeShape() {
     ['circle', 'rectangle', 'triangle', 'sphere', 'cylinder', 'cube'].forEach(s => {
         document.getElementById(`geom-${s}`).classList.add('hidden');
     });
-    
     document.getElementById(`geom-${shape}`).classList.remove('hidden');
     document.getElementById('geom-res').style.display = 'none';
 }
@@ -236,35 +209,119 @@ function calcGeometry() {
         const r = parseFloat(document.getElementById('circ-r').value);
         if (isNaN(r) || r < 0) { showResult('geom-res', 'Invalid Radius', true); return; }
         resHtml = `Area: ${(Math.PI * r * r).toFixed(4)}<br>Circumference: ${(2 * Math.PI * r).toFixed(4)}`;
-    } 
-    else if (shape === 'rectangle') {
+    } else if (shape === 'rectangle') {
         const w = parseFloat(document.getElementById('rect-w').value);
         const h = parseFloat(document.getElementById('rect-h').value);
         if (isNaN(w) || isNaN(h) || w < 0 || h < 0) { showResult('geom-res', 'Invalid Dimensions', true); return; }
         resHtml = `Area: ${(w * h).toFixed(4)}<br>Perimeter: ${(2 * (w + h)).toFixed(4)}`;
-    }
-    else if (shape === 'triangle') {
+    } else if (shape === 'triangle') {
         const b = parseFloat(document.getElementById('tri-b').value);
         const h = parseFloat(document.getElementById('tri-h').value);
         if (isNaN(b) || isNaN(h) || b < 0 || h < 0) { showResult('geom-res', 'Invalid Dimensions', true); return; }
         resHtml = `Area: ${(0.5 * b * h).toFixed(4)}<br><small>Perimeter requires 3 side lengths.</small>`;
-    }
-    else if (shape === 'sphere') {
+    } else if (shape === 'sphere') {
         const r = parseFloat(document.getElementById('sphere-r').value);
         if (isNaN(r) || r < 0) { showResult('geom-res', 'Invalid Radius', true); return; }
         resHtml = `Volume: ${((4/3) * Math.PI * Math.pow(r, 3)).toFixed(4)}<br>Surface Area: ${(4 * Math.PI * r * r).toFixed(4)}`;
-    }
-    else if (shape === 'cylinder') {
+    } else if (shape === 'cylinder') {
         const r = parseFloat(document.getElementById('cyl-r').value);
         const h = parseFloat(document.getElementById('cyl-h').value);
         if (isNaN(r) || isNaN(h) || r < 0 || h < 0) { showResult('geom-res', 'Invalid Dimensions', true); return; }
         resHtml = `Volume: ${(Math.PI * r * r * h).toFixed(4)}<br>Surface Area: ${(2 * Math.PI * r * h + 2 * Math.PI * r * r).toFixed(4)}`;
-    }
-    else if (shape === 'cube') {
+    } else if (shape === 'cube') {
         const s = parseFloat(document.getElementById('cube-s').value);
         if (isNaN(s) || s < 0) { showResult('geom-res', 'Invalid Side', true); return; }
         resHtml = `Volume: ${(Math.pow(s, 3)).toFixed(4)}<br>Surface Area: ${(6 * s * s).toFixed(4)}`;
     }
     
     showResult('geom-res', resHtml);
+}
+
+// --- MathsGPT Logic ---
+function handleGptEnter(e) {
+    if (e.key === 'Enter') {
+        sendGptMessage();
+    }
+}
+
+function sendGptMessage() {
+    const inputEl = document.getElementById('gpt-input');
+    const msg = inputEl.value.trim();
+    if (!msg) return;
+
+    // Append user message
+    appendMessage(msg, 'user');
+    inputEl.value = '';
+
+    // Process and respond
+    setTimeout(() => {
+        const response = processMathQuery(msg);
+        appendMessage(response, 'bot');
+    }, 400); // slight delay for "thinking" feel
+}
+
+function appendMessage(text, sender) {
+    const container = document.getElementById('chat-messages');
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `message ${sender}`;
+    msgDiv.innerHTML = text;
+    container.appendChild(msgDiv);
+    container.scrollTop = container.scrollHeight;
+}
+
+function processMathQuery(query) {
+    if (typeof math === 'undefined') {
+        return "Sorry, the math engine is still loading. Please try again in a moment.";
+    }
+
+    const q = query.toLowerCase();
+
+    try {
+        // Natural language matching rules
+        if (q.includes('area') && q.includes('circle') && q.includes('radius')) {
+            const match = q.match(/\d+(\.\d+)?/);
+            if (match) {
+                const r = parseFloat(match[0]);
+                return `The area of a circle with radius ${r} is <strong>${(Math.PI * r * r).toFixed(4)}</strong>`;
+            }
+        }
+        
+        if (q.includes('derivative') || q.includes('derive')) {
+            // Extract expression after the word derivative
+            const exprMatch = query.match(/(?:derivative of|derive)\s+(.*)/i);
+            if (exprMatch && exprMatch[1]) {
+                const res = math.derivative(exprMatch[1], 'x').toString();
+                return `The derivative is: <strong>${res}</strong>`;
+            }
+        }
+
+        if (q.includes('simplify')) {
+            const exprMatch = query.match(/simplify\s+(.*)/i);
+            if (exprMatch && exprMatch[1]) {
+                const res = math.simplify(exprMatch[1]).toString();
+                return `Simplified: <strong>${res}</strong>`;
+            }
+        }
+
+        // Evaluate plain mathematical expression
+        // Remove conversational words that might break math.js evaluation
+        let cleanQuery = q.replace(/(what is|calculate|solve|evaluate)\s+/gi, '').trim();
+        
+        // Let math.js try to evaluate or simplify it
+        const result = math.evaluate(cleanQuery);
+        
+        // Format result nicely
+        if (typeof result === 'object' && result.entries) {
+            // It's a matrix/array result
+            return `Result: <strong>[${result.entries.join(', ')}]</strong>`;
+        } else if (typeof result === 'function') {
+            return `I parsed that as a function, but I need specific values to evaluate it.`;
+        } else {
+            return `The answer is <strong>${result.toString()}</strong>`;
+        }
+        
+    } catch (error) {
+        console.error(error);
+        return "I'm a simple MathsGPT ✨. I can evaluate mathematical expressions (e.g. `250 * 4 + 10`), take derivatives (`derivative of x^2`), or simplify algebra (`simplify 2x + 5x`). Please try phrasing your question mathematically!";
+    }
 }

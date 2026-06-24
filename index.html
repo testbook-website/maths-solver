@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- Math.js for MathsGPT logic -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
 </head>
 <body>
     <div class="widget-container">
@@ -17,6 +19,7 @@
             <button class="tab-btn" data-target="algebra">Algebra</button>
             <button class="tab-btn" data-target="trigo">Trigonometry</button>
             <button class="tab-btn" data-target="geometry">Geometry</button>
+            <button class="tab-btn gpt-tab" data-target="mathsgpt">✨ MathsGPT</button>
         </nav>
 
         <!-- Tab Contents -->
@@ -210,6 +213,24 @@
 
                 <button class="action-btn full-width" onclick="calcGeometry()">Calculate</button>
                 <div id="geom-res" class="result-box"></div>
+            </div>
+
+            <!-- MathsGPT Tab -->
+            <div id="mathsgpt" class="tab-content">
+                <div class="gpt-chat-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message bot">
+                            Hi! I'm MathsGPT ✨. You can ask me natural language questions like:<br><br>
+                            👉 <i>"What is 250 * 4 + 10?"</i><br>
+                            👉 <i>"Derivative of x^3"</i><br>
+                            👉 <i>"Simplify 2x + 5x"</i><br>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="gpt-input" placeholder="Ask a math question..." class="styled-input" autocomplete="off" onkeypress="handleGptEnter(event)">
+                        <button class="action-btn gpt-send-btn" onclick="sendGptMessage()">Send</button>
+                    </div>
+                </div>
             </div>
 
         </div>
