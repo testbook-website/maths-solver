@@ -21,13 +21,13 @@
     <!-- Login Overlay -->
     <div id="login-overlay" class="overlay active">
         <div class="login-card">
-            <h1 class="logo-text" style="font-size: 2rem; color: #dc2626; margin-bottom: 20px;">Testbook</h1>
+            <h1 class="logo-text" style="font-size: 2rem; color: #2563eb; margin-bottom: 20px;">Testbook</h1>
             <h2>Welcome to Maths Guru</h2>
             <p>Please enter your details to start learning.</p>
             <input type="text" id="login-name" class="styled-input full-width" placeholder="Full Name">
             <input type="email" id="login-email" class="styled-input full-width" placeholder="Email Address">
             <input type="tel" id="login-phone" class="styled-input full-width" placeholder="Phone Number">
-            <button class="action-btn red-btn" onclick="submitLogin()">Start Learning</button>
+            <button class="action-btn blue-btn" onclick="submitLogin()">Start Learning</button>
             <p id="login-error" class="error-text hidden">Please fill in all fields.</p>
         </div>
     </div>
@@ -41,28 +41,30 @@
                 <h2 class="logo-text">Testbook <span style="font-weight: 300;">Maths</span></h2>
             </div>
             <nav class="nav-center">
-                <button class="tab-btn active" data-target="guru">🤖 AI Chat</button>
-                <button class="tab-btn" data-target="graphing">📈 Graphing</button>
+                <button class="tab-btn active" data-target="guru">🤖 Smart Assistant</button>
+                <button class="tab-btn" data-target="graphing">📈 Visualizer</button>
                 <button class="tab-btn" data-target="calculators">🔢 Calculators</button>
+                <button class="tab-btn" data-target="converter">⚖️ Converter</button>
                 <button class="tab-btn" data-target="verify">✅ Verify</button>
-                <button class="tab-btn" data-target="sheets">📝 Cheat Sheets</button>
+                <button class="tab-btn" data-target="sheets">📝 Formula Cards</button>
                 <button class="tab-btn" data-target="worksheets">🧠 Worksheets</button>
             </nav>
             <div class="nav-right">
                 <div class="user-avatar" id="user-initials">T</div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
         </header>
 
         <!-- Main Content Area -->
         <main class="main-content">
             
-            <!-- 1. Testbook Maths Guru (AI Chat) -->
+            <!-- 1. Smart Assistant (AI Chat) -->
             <div id="guru" class="tab-content active">
                 <div class="full-page-container">
                     <div class="gpt-chat-container">
                         <div class="chat-messages" id="chat-messages">
                             <div class="message bot">
-                                Hi! I'm Testbook Maths Guru. I can help you solve complex equations, simplify algebra, and calculate geometry! Try asking me:<br><br>
+                                Hi! I'm Testbook Smart Assistant. I can help you solve complex equations, simplify algebra, and calculate geometry! Try asking me:<br><br>
                                 👉 <i>"Calculate 250 * 4 + 10"</i><br>
                                 👉 <i>"Derivative of x^3"</i><br>
                                 👉 <i>"Simplify 2x + 5x"</i><br>
@@ -70,7 +72,7 @@
                         </div>
                         <div class="chat-input-area">
                             <input type="text" id="gpt-input" placeholder="Ask a math question..." class="styled-input" autocomplete="off" onkeypress="handleGptEnter(event)">
-                            <button class="action-btn gpt-send-btn red-btn" onclick="sendGptMessage()">Send</button>
+                            <button class="action-btn gpt-send-btn blue-btn" onclick="sendGptMessage()">Send</button>
                         </div>
                         
                         <!-- Recent Searches Section -->
@@ -84,12 +86,12 @@
                 </div>
             </div>
 
-            <!-- 2. Graphing Calculator -->
+            <!-- 2. Visualizer (Graphing) -->
             <div id="graphing" class="tab-content">
                 <div class="split-layout">
                     <!-- Left Sidebar for Input -->
                     <div class="sidebar">
-                        <h3 class="sidebar-title">Graphing Tool</h3>
+                        <h3 class="sidebar-title">Visualizer Tool</h3>
                         <div class="graph-input-group">
                             <label>Expression f(x)</label>
                             <input type="text" id="graph-input" value="x^2" class="styled-input full-width">
@@ -98,7 +100,7 @@
                             <label>Expression g(x) (Optional)</label>
                             <input type="text" id="graph-input-2" value="" class="styled-input full-width" placeholder="e.g., sin(x)">
                         </div>
-                        <button class="action-btn red-btn full-width" onclick="drawGraph()">Plot Graph</button>
+                        <button class="action-btn blue-btn full-width" onclick="drawGraph()">Plot Graph</button>
                         
                         <div class="instructions mt-20">
                             <p><b>Tips:</b></p>
@@ -117,126 +119,110 @@
                 </div>
             </div>
 
-            <!-- 3. Cheat Sheets -->
+            <!-- 3. Formula Cards (Swiping Layout) -->
             <div id="sheets" class="tab-content">
-                <div class="split-layout">
-                    <!-- Left Sidebar Nav -->
-                    <div class="sidebar">
-                        <h3 class="sidebar-title">Categories</h3>
-                        <ul class="sidebar-nav">
-                            <li><a href="#" onclick="scrollToSection('cs-number')" class="active">Number Rules</a></li>
-                            <li><a href="#" onclick="scrollToSection('cs-expand')">Expand Rules</a></li>
-                            <li><a href="#" onclick="scrollToSection('cs-fractions')">Fractions Rules</a></li>
-                            <li><a href="#" onclick="scrollToSection('cs-exponents')">Exponent Rules</a></li>
-                            <li><a href="#" onclick="scrollToSection('cs-radicals')">Radical Rules</a></li>
-                            <li><a href="#" onclick="scrollToSection('cs-log')">Logarithm Rules</a></li>
-                            <li class="nav-divider">Calculus</li>
-                            <li><a href="#" onclick="scrollToSection('cs-derivatives')">Derivatives</a></li>
-                            <li><a href="#" onclick="scrollToSection('cs-integrals')">Integrals</a></li>
-                            <li class="nav-divider">Trigonometry</li>
-                            <li><a href="#" onclick="scrollToSection('cs-trig')">Trig Identities</a></li>
-                        </ul>
+                <div class="full-page-container flex-col-center">
+                    <h2 class="page-title text-center">Quick Formula Cards</h2>
+                    <p class="subtitle text-center">Swipe through essential formulas for rapid revision.</p>
+                    
+                    <div class="carousel-container mt-20">
+                        <button class="carousel-btn prev-btn" onclick="moveCarousel(-1)">&#10094;</button>
+                        
+                        <div class="carousel-viewport">
+                            <div class="carousel-track" id="formula-track">
+                                
+                                <!-- Card 1 -->
+                                <div class="carousel-card">
+                                    <h3 class="cs-header">Number Rules</h3>
+                                    <div class="cs-grid">
+                                        <div class="cs-item">a · 0 = 0</div>
+                                        <div class="cs-item">1 · a = a</div>
+                                        <div class="cs-item">a · (1/a) = 1 (a ≠ 0)</div>
+                                        <div class="cs-item">a + (-a) = 0</div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2 -->
+                                <div class="carousel-card">
+                                    <h3 class="cs-header">Expand Rules</h3>
+                                    <div class="cs-grid">
+                                        <div class="cs-item">a(b + c) = ab + ac</div>
+                                        <div class="cs-item">(a + b)² = a² + 2ab + b²</div>
+                                        <div class="cs-item">(a - b)² = a² - 2ab + b²</div>
+                                        <div class="cs-item">(a + b)(a - b) = a² - b²</div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3 -->
+                                <div class="carousel-card">
+                                    <h3 class="cs-header">Exponents & Radicals</h3>
+                                    <div class="cs-grid">
+                                        <div class="cs-item">xᵃ · xᵇ = xᵃ⁺ᵇ</div>
+                                        <div class="cs-item">(xᵃ)ᵇ = xᵃ·ᵇ</div>
+                                        <div class="cs-item">x⁻ᵃ = 1 / xᵃ</div>
+                                        <div class="cs-item">√(ab) = √a · √b</div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4 -->
+                                <div class="carousel-card">
+                                    <h3 class="cs-header">Trigonometry</h3>
+                                    <div class="cs-grid">
+                                        <div class="cs-item">sin²(x) + cos²(x) = 1</div>
+                                        <div class="cs-item">tan(x) = sin(x)/cos(x)</div>
+                                        <div class="cs-item">sin(2x) = 2sin(x)cos(x)</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Card 5 -->
+                                <div class="carousel-card">
+                                    <h3 class="cs-header">Calculus Basics</h3>
+                                    <div class="cs-grid">
+                                        <div class="cs-item">d/dx(xⁿ) = n·xⁿ⁻¹</div>
+                                        <div class="cs-item">d/dx(sin x) = cos x</div>
+                                        <div class="cs-item">∫ xⁿ dx = xⁿ⁺¹/(n+1)</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        <button class="carousel-btn next-btn" onclick="moveCarousel(1)">&#10095;</button>
                     </div>
                     
-                    <!-- Right Content Panel -->
-                    <div class="main-panel scrollable-panel" id="cheatsheet-content">
-                        <h2 class="page-title">Algebra & Calculus Cheat Sheets</h2>
+                    <div class="carousel-dots" id="carousel-dots">
+                        <!-- Dots injected by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Unit Converter -->
+            <div id="converter" class="tab-content">
+                <div class="full-page-container flex-col-center">
+                    <div class="centered-content-box">
+                        <h2 class="page-title text-center">Unit Converter</h2>
+                        <p class="subtitle text-center">Instantly convert between physical units.</p>
                         
-                        <div id="cs-number" class="cs-section">
-                            <h3 class="cs-header">Number Rules</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">a · 0 = 0</div>
-                                <div class="cs-card">1 · a = a</div>
-                                <div class="cs-card">a · (1/a) = 1  (a ≠ 0)</div>
-                                <div class="cs-card">a + (-a) = 0</div>
-                            </div>
+                        <div class="shape-selector mt-20">
+                            <select id="conv-type" class="styled-input full-width" onchange="setupConverter()">
+                                <option value="length">Length</option>
+                                <option value="weight">Weight / Mass</option>
+                                <option value="temperature">Temperature</option>
+                                <option value="volume">Volume</option>
+                            </select>
                         </div>
 
-                        <div id="cs-expand" class="cs-section">
-                            <h3 class="cs-header">Expand Rules</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">a(b + c) = ab + ac</div>
-                                <div class="cs-card">-(a ± b) = -a ∓ b</div>
-                                <div class="cs-card">(a + b)(c + d) = ac + ad + bc + bd</div>
-                                <div class="cs-card">(a + b)² = a² + 2ab + b²</div>
-                                <div class="cs-card">(a - b)² = a² - 2ab + b²</div>
-                                <div class="cs-card">(a + b)(a - b) = a² - b²</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-fractions" class="cs-section">
-                            <h3 class="cs-header">Fractions Rules</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">a/b + c/d = (ad + bc) / bd</div>
-                                <div class="cs-card">a/b - c/d = (ad - bc) / bd</div>
-                                <div class="cs-card">(a/b) · (c/d) = ac / bd</div>
-                                <div class="cs-card">(a/b) ÷ (c/d) = (a/b) · (d/c) = ad / bc</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-exponents" class="cs-section">
-                            <h3 class="cs-header">Exponent Rules</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">xᵃ · xᵇ = xᵃ⁺ᵇ</div>
-                                <div class="cs-card">xᵃ / xᵇ = xᵃ⁻ᵇ</div>
-                                <div class="cs-card">(xᵃ)ᵇ = xᵃ·ᵇ</div>
-                                <div class="cs-card">x⁻ᵃ = 1 / xᵃ</div>
-                                <div class="cs-card">x⁰ = 1 (x ≠ 0)</div>
-                                <div class="cs-card">(xy)ᵃ = xᵃyᵃ</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-radicals" class="cs-section">
-                            <h3 class="cs-header">Radical Rules</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">√(ab) = √a · √b</div>
-                                <div class="cs-card">√(a/b) = √a / √b</div>
-                                <div class="cs-card">x^(a/b) = ᵇ√(xᵃ)</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-log" class="cs-section">
-                            <h3 class="cs-header">Logarithm Rules</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">log(ab) = log(a) + log(b)</div>
-                                <div class="cs-card">log(a/b) = log(a) - log(b)</div>
-                                <div class="cs-card">log(aᵇ) = b·log(a)</div>
-                                <div class="cs-card">logₐ(a) = 1</div>
-                                <div class="cs-card">logₐ(1) = 0</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-derivatives" class="cs-section">
-                            <h3 class="cs-header">Derivatives</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">d/dx (c) = 0</div>
-                                <div class="cs-card">d/dx (xⁿ) = n·xⁿ⁻¹</div>
-                                <div class="cs-card">d/dx (sin x) = cos x</div>
-                                <div class="cs-card">d/dx (cos x) = -sin x</div>
-                                <div class="cs-card">d/dx (eˣ) = eˣ</div>
-                                <div class="cs-card">d/dx (ln x) = 1/x</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-integrals" class="cs-section">
-                            <h3 class="cs-header">Integrals</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">∫ xⁿ dx = (xⁿ⁺¹) / (n+1) + C</div>
-                                <div class="cs-card">∫ sin x dx = -cos x + C</div>
-                                <div class="cs-card">∫ cos x dx = sin x + C</div>
-                                <div class="cs-card">∫ eˣ dx = eˣ + C</div>
-                                <div class="cs-card">∫ (1/x) dx = ln|x| + C</div>
-                            </div>
-                        </div>
-
-                        <div id="cs-trig" class="cs-section">
-                            <h3 class="cs-header">Trigonometric Identities</h3>
-                            <div class="cs-grid">
-                                <div class="cs-card">sin²(x) + cos²(x) = 1</div>
-                                <div class="cs-card">tan(x) = sin(x) / cos(x)</div>
-                                <div class="cs-card">cot(x) = cos(x) / sin(x)</div>
-                                <div class="cs-card">sin(2x) = 2·sin(x)·cos(x)</div>
-                                <div class="cs-card">cos(2x) = cos²(x) - sin²(x)</div>
+                        <div class="converter-box">
+                            <div class="input-group-row">
+                                <div style="flex: 1">
+                                    <input type="number" id="conv-input" class="styled-input full-width" value="1" oninput="calculateConversion()">
+                                    <select id="conv-from" class="styled-input full-width" onchange="calculateConversion()"></select>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: center; font-size: 1.5rem; padding-bottom: 16px;">=</div>
+                                <div style="flex: 1">
+                                    <input type="text" id="conv-output" class="styled-input full-width" readonly style="background: #f1f5f9; cursor: default;">
+                                    <select id="conv-to" class="styled-input full-width" onchange="calculateConversion()"></select>
+                                </div>
                             </div>
                         </div>
 
@@ -244,7 +230,7 @@
                 </div>
             </div>
 
-            <!-- 4. Calculators (Combined Basic, Algebra, Trigo, Geometry) -->
+            <!-- 5. Calculators (Combined Basic, Algebra, Trigo, Geometry) -->
             <div id="calculators" class="tab-content">
                 <div class="full-page-container flex-col-center">
                     <div class="centered-content-box">
@@ -307,7 +293,7 @@
                                 <input type="number" id="quad-b" placeholder="b" class="styled-input">
                                 <input type="number" id="quad-c" placeholder="c" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn" onclick="solveQuadratic()">Solve</button>
+                            <button class="action-btn blue-btn" onclick="solveQuadratic()">Solve</button>
                             <div id="quad-res" class="result-box"></div>
                         </div>
 
@@ -323,7 +309,7 @@
                                 <input type="number" id="lin-b2" placeholder="b₂" class="styled-input">
                                 <input type="number" id="lin-c2" placeholder="c₂" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn" onclick="solveLinear()">Solve</button>
+                            <button class="action-btn blue-btn" onclick="solveLinear()">Solve</button>
                             <div id="lin-res" class="result-box"></div>
                         </div>
 
@@ -336,7 +322,7 @@
                                 <input type="number" id="dist-x2" placeholder="x₂" class="styled-input">
                                 <input type="number" id="dist-y2" placeholder="y₂" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn" onclick="solveDistance()">Calculate Distance</button>
+                            <button class="action-btn blue-btn" onclick="solveDistance()">Calculate Distance</button>
                             <div id="dist-res" class="result-box"></div>
                         </div>
 
@@ -349,7 +335,7 @@
                                 <input type="number" id="mid-x2" placeholder="x₂" class="styled-input">
                                 <input type="number" id="mid-y2" placeholder="y₂" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn" onclick="solveMidpoint()">Calculate Midpoint</button>
+                            <button class="action-btn blue-btn" onclick="solveMidpoint()">Calculate Midpoint</button>
                             <div id="mid-res" class="result-box"></div>
                         </div>
 
@@ -374,7 +360,7 @@
                         <!-- Geometry Sections -->
                         <div id="geom-circle" class="calc-section hidden">
                             <input type="number" id="circ-r" placeholder="Radius (r)" class="styled-input full-width">
-                            <button class="action-btn red-btn full-width" onclick="calcGeometry('circle')">Calculate</button>
+                            <button class="action-btn blue-btn full-width" onclick="calcGeometry('circle')">Calculate</button>
                         </div>
 
                         <div id="geom-rectangle" class="calc-section hidden">
@@ -382,7 +368,7 @@
                                 <input type="number" id="rect-w" placeholder="Width" class="styled-input">
                                 <input type="number" id="rect-h" placeholder="Height" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn full-width" onclick="calcGeometry('rectangle')">Calculate</button>
+                            <button class="action-btn blue-btn full-width" onclick="calcGeometry('rectangle')">Calculate</button>
                         </div>
 
                         <div id="geom-triangle" class="calc-section hidden">
@@ -390,12 +376,12 @@
                                 <input type="number" id="tri-b" placeholder="Base" class="styled-input">
                                 <input type="number" id="tri-h" placeholder="Height" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn full-width" onclick="calcGeometry('triangle')">Calculate</button>
+                            <button class="action-btn blue-btn full-width" onclick="calcGeometry('triangle')">Calculate</button>
                         </div>
 
                         <div id="geom-sphere" class="calc-section hidden">
                             <input type="number" id="sphere-r" placeholder="Radius (r)" class="styled-input full-width">
-                            <button class="action-btn red-btn full-width" onclick="calcGeometry('sphere')">Calculate</button>
+                            <button class="action-btn blue-btn full-width" onclick="calcGeometry('sphere')">Calculate</button>
                         </div>
 
                         <div id="geom-cylinder" class="calc-section hidden">
@@ -403,12 +389,12 @@
                                 <input type="number" id="cyl-r" placeholder="Radius" class="styled-input">
                                 <input type="number" id="cyl-h" placeholder="Height" class="styled-input">
                             </div>
-                            <button class="action-btn red-btn full-width" onclick="calcGeometry('cylinder')">Calculate</button>
+                            <button class="action-btn blue-btn full-width" onclick="calcGeometry('cylinder')">Calculate</button>
                         </div>
 
                         <div id="geom-cube" class="calc-section hidden">
                             <input type="number" id="cube-s" placeholder="Side Length (s)" class="styled-input full-width">
-                            <button class="action-btn red-btn full-width" onclick="calcGeometry('cube')">Calculate</button>
+                            <button class="action-btn blue-btn full-width" onclick="calcGeometry('cube')">Calculate</button>
                         </div>
                         
                         <div id="geom-res" class="result-box"></div>
@@ -416,7 +402,7 @@
                 </div>
             </div>
 
-            <!-- 5. Verify -->
+            <!-- 6. Verify -->
             <div id="verify" class="tab-content">
                 <div class="full-page-container flex-col-center">
                     <div class="centered-content-box">
@@ -430,14 +416,14 @@
                             <label>Expression 2</label>
                             <input type="text" id="verify-ex2" class="styled-input full-width" placeholder="e.g. (x-1)(x+1)">
                             
-                            <button class="action-btn red-btn full-width" onclick="verifyExpressions()">Verify Identity</button>
+                            <button class="action-btn blue-btn full-width" onclick="verifyExpressions()">Verify Identity</button>
                         </div>
                         <div id="verify-res" class="result-box large-result"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- 6. Worksheets -->
+            <!-- 7. Worksheets -->
             <div id="worksheets" class="tab-content">
                 <div class="full-page-container flex-col-center">
                     <div class="centered-content-box">
@@ -445,7 +431,7 @@
                         <p class="subtitle text-center">Generate Pre-Algebra practice problems.</p>
                         
                         <div class="section-card center-text mt-20">
-                            <button class="action-btn red-btn full-width" onclick="generateProblem()">Generate New Problem</button>
+                            <button class="action-btn blue-btn full-width" onclick="generateProblem()">Generate New Problem</button>
                             
                             <div id="worksheet-problem" class="problem-display">Click generate to start.</div>
                             

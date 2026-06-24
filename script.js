@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("user-initials").innerText = user.name.charAt(0).toUpperCase();
         showApp();
     }
+    initCarousel();
+    setupConverter();
 });
 
 function submitLogin() {
@@ -27,16 +29,19 @@ function submitLogin() {
     localStorage.setItem("mathsGuruUser", JSON.stringify({ name, email, phone }));
     document.getElementById("user-initials").innerText = name.charAt(0).toUpperCase();
     
-    if (WEB_APP_URL !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-        fetch(WEB_APP_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'login', name: name, email: email, phone: phone })
-        }).catch(console.error);
-    }
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', name: name, email: email, phone: phone })
+    }).catch(console.error);
     
     showApp();
+}
+
+function logout() {
+    localStorage.removeItem("mathsGuruUser");
+    location.reload();
 }
 
 function showApp() {
@@ -59,29 +64,12 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.getElementById(targetId).classList.add('active');
         
         if (targetId === 'graphing') setTimeout(drawGraph, 50);
+        if (targetId === 'sheets') setTimeout(updateCarouselDisplay, 50);
     });
 });
 
 // ==========================================
-// CHEAT SHEET SIDEBAR SCROLL LOGIC
-// ==========================================
-function scrollToSection(id) {
-    const el = document.getElementById(id);
-    const container = document.getElementById('cheatsheet-content');
-    
-    // Smooth scroll the container
-    container.scrollTo({
-        top: el.offsetTop - 80, 
-        behavior: 'smooth'
-    });
-
-    // Update active state in sidebar
-    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
-    event.target.classList.add('active');
-}
-
-// ==========================================
-// 1. TESTBOOK MATHS GURU (AI CHAT)
+// 1. SMART ASSISTANT (AI CHAT)
 // ==========================================
 function handleGptEnter(e) { if (e.key === 'Enter') sendGptMessage(); }
 
@@ -93,17 +81,14 @@ function sendGptMessage() {
     appendMessage(msg, 'user');
     inputEl.value = '';
 
-    if (WEB_APP_URL !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-        fetch(WEB_APP_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'search', query: msg })
-        }).catch(console.error);
-        addRecentSearchLocal(msg);
-    } else {
-        addRecentSearchLocal(msg);
-    }
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'search', query: msg })
+    }).catch(console.error);
+    
+    addRecentSearchLocal(msg);
 
     setTimeout(() => {
         const response = processMathQuery(msg);
@@ -147,18 +132,14 @@ function processMathQuery(query) {
 let localSearches = ["derivative of x^2", "500 * 20", "area of circle radius 5"];
 
 function fetchRecentSearches() {
-    if (WEB_APP_URL !== "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-        fetch(WEB_APP_URL + "?action=get_recent")
-            .then(res => res.json())
-            .then(data => {
-                if (data.status === 'success' && data.searches.length > 0) {
-                    localSearches = data.searches;
-                    renderRecentSearches();
-                }
-            }).catch(err => { renderRecentSearches(); });
-    } else {
-        renderRecentSearches();
-    }
+    fetch(WEB_APP_URL + "?action=get_recent")
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success' && data.searches.length > 0) {
+                localSearches = data.searches;
+                renderRecentSearches();
+            }
+        }).catch(err => { renderRecentSearches(); });
 }
 
 function addRecentSearchLocal(query) {
@@ -179,7 +160,7 @@ function renderRecentSearches() {
 }
 
 // ==========================================
-// 2. GRAPHING CALCULATOR
+// 2. VISUALIZER (GRAPHING)
 // ==========================================
 function drawGraph() {
     const expr1 = document.getElementById('graph-input').value;
@@ -187,18 +168,17 @@ function drawGraph() {
     
     try {
         const container = document.getElementById('plot-container');
-        // The canvas width takes the rest of the flex layout (-48px padding)
         const width = container.clientWidth - 48;
         const height = container.clientHeight - 48;
         
         let plotData = [];
-        if (expr1) plotData.push({ fn: expr1, color: '#e11d48' });
-        if (expr2) plotData.push({ fn: expr2, color: '#3b82f6' });
+        if (expr1) plotData.push({ fn: expr1, color: '#2563eb' });
+        if (expr2) plotData.push({ fn: expr2, color: '#10b981' });
 
         functionPlot({
             target: '#plot',
             width: width,
-            height: height > 300 ? height : 500, // fallback
+            height: height > 300 ? height : 500,
             yAxis: { domain: [-10, 10] },
             xAxis: { domain: [-10, 10] },
             grid: true,
@@ -209,15 +189,111 @@ function drawGraph() {
     }
 }
 
-// Handle window resize for graph
 window.addEventListener('resize', () => {
-    if (document.getElementById('graphing').classList.contains('active')) {
-        drawGraph();
-    }
+    if (document.getElementById('graphing').classList.contains('active')) drawGraph();
 });
 
 // ==========================================
-// 3. CALCULATORS
+// 3. FORMULA CARDS (CAROUSEL)
+// ==========================================
+let currentSlide = 0;
+let totalSlides = 0;
+
+function initCarousel() {
+    const cards = document.querySelectorAll('.carousel-card');
+    totalSlides = cards.length;
+    
+    const dotsContainer = document.getElementById('carousel-dots');
+    dotsContainer.innerHTML = '';
+    
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('div');
+        dot.className = i === 0 ? 'dot active' : 'dot';
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    }
+    updateCarouselDisplay();
+}
+
+function moveCarousel(direction) {
+    currentSlide += direction;
+    if (currentSlide < 0) currentSlide = totalSlides - 1;
+    if (currentSlide >= totalSlides) currentSlide = 0;
+    updateCarouselDisplay();
+}
+
+function goToSlide(index) {
+    currentSlide = index;
+    updateCarouselDisplay();
+}
+
+function updateCarouselDisplay() {
+    const track = document.getElementById('formula-track');
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    
+    document.querySelectorAll('.dot').forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+// ==========================================
+// 4. UNIT CONVERTER
+// ==========================================
+const unitData = {
+    length: { Meters: 1, Kilometers: 1000, Centimeters: 0.01, Miles: 1609.34, Yards: 0.9144, Feet: 0.3048, Inches: 0.0254 },
+    weight: { Kilograms: 1, Grams: 0.001, Metric_Tons: 1000, Pounds: 0.453592, Ounces: 0.0283495 },
+    temperature: { Celsius: 'C', Fahrenheit: 'F', Kelvin: 'K' },
+    volume: { Liters: 1, Milliliters: 0.001, Gallons: 3.78541, Quarts: 0.946353, Pints: 0.473176 }
+};
+
+function setupConverter() {
+    const type = document.getElementById('conv-type').value;
+    const fromSelect = document.getElementById('conv-from');
+    const toSelect = document.getElementById('conv-to');
+    
+    fromSelect.innerHTML = '';
+    toSelect.innerHTML = '';
+    
+    Object.keys(unitData[type]).forEach(unit => {
+        fromSelect.add(new Option(unit.replace('_', ' '), unit));
+        toSelect.add(new Option(unit.replace('_', ' '), unit));
+    });
+    
+    if(toSelect.options.length > 1) toSelect.selectedIndex = 1;
+    calculateConversion();
+}
+
+function calculateConversion() {
+    const type = document.getElementById('conv-type').value;
+    const inputVal = parseFloat(document.getElementById('conv-input').value);
+    const fromUnit = document.getElementById('conv-from').value;
+    const toUnit = document.getElementById('conv-to').value;
+    const outEl = document.getElementById('conv-output');
+    
+    if (isNaN(inputVal)) { outEl.value = ''; return; }
+    
+    if (type === 'temperature') {
+        let celsius;
+        if (fromUnit === 'Celsius') celsius = inputVal;
+        else if (fromUnit === 'Fahrenheit') celsius = (inputVal - 32) * 5/9;
+        else if (fromUnit === 'Kelvin') celsius = inputVal - 273.15;
+        
+        let result;
+        if (toUnit === 'Celsius') result = celsius;
+        else if (toUnit === 'Fahrenheit') result = (celsius * 9/5) + 32;
+        else if (toUnit === 'Kelvin') result = celsius + 273.15;
+        
+        outEl.value = parseFloat(result.toFixed(4));
+    } else {
+        // Base conversion
+        const baseValue = inputVal * unitData[type][fromUnit];
+        const result = baseValue / unitData[type][toUnit];
+        outEl.value = parseFloat(result.toPrecision(7)); // Handle very small/large nums nicely
+    }
+}
+
+// ==========================================
+// 5. CALCULATORS
 // ==========================================
 function changeCalcCategory() {
     const cat = document.getElementById('calc-category').value;
@@ -337,7 +413,7 @@ function calcGeometry(shape) {
 }
 
 // ==========================================
-// 4. VERIFY TOOL
+// 6. VERIFY TOOL
 // ==========================================
 function verifyExpressions() {
     const ex1 = document.getElementById('verify-ex1').value;
@@ -357,7 +433,7 @@ function verifyExpressions() {
 }
 
 // ==========================================
-// 5. WORKSHEETS (PRACTICE)
+// 7. WORKSHEETS (PRACTICE)
 // ==========================================
 let currentWorksheetAnswer = '';
 function generateProblem() {
