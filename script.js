@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURATION
 // ==========================================
-const WEB_APP_URL = "YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxMQ_1cY4JcSSPIdTfUbn-AA-7FPtpq3qV4JAfZBaVft-Hs-SkeZ96IESvDfPAZOWVM/exec";
 
 // ==========================================
 // LOGIN & APP INIT
