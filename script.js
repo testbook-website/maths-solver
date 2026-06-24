@@ -109,6 +109,15 @@ function processMathQuery(query) {
     if (typeof math === 'undefined') return "Engine loading...";
     const q = query.toLowerCase();
     try {
+        if (q.includes('right-angled triangle') || q.includes('right triangle')) {
+            const nums = q.match(/\d+(\.\d+)?/g);
+            if (nums && nums.length >= 2) {
+                const a = parseFloat(nums[0]);
+                const b = parseFloat(nums[1]);
+                const hyp = Math.sqrt(a*a + b*b);
+                return `Using Pythagorean theorem (a² + b² = c²):<br>Hypotenuse = <strong>${hyp.toFixed(4)}</strong>`;
+            }
+        }
         if (q.includes('area') && q.includes('circle') && q.includes('radius')) {
             const match = q.match(/\d+(\.\d+)?/);
             if (match) return `Area = <strong>${(Math.PI * Math.pow(parseFloat(match[0]), 2)).toFixed(4)}</strong>`;
